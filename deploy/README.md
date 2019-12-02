@@ -14,6 +14,7 @@ The production configuration (azure.atat.code.mil, currently) is reflected in th
 - AUTH_DOMAIN: The host domain for the authentication endpoint for the environment.
 - KV_MI_ID: the fully qualified id (path) of the managed identity for the key vault (instructions on retrieving this are down in section on [Setting up FlexVol](#configuring-the-identity)). Example: /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/RESOURCE_GROUP_NAME/providers/Microsoft.ManagedIdentity/userAssignedIdentities/MANAGED_IDENTITY_NAME
 - KV_MI_CLIENT_ID: The client id of the managed identity for the key vault. This is a GUID.
+- TENANT_ID: The id of the active directory tenant in which the cluster and it's associated users exist. This is a GUID.
 
 We use envsubst to substitute values for these variables. There is a wrapper script (script/k8s_config) that will output the compiled configuration, using a combination of kustomize and envsubst.
 
@@ -169,6 +170,12 @@ Then:
 kubectl -n atat create secret tls azure-atat-code-mil-tls --key="[path to the private key]" --cert="[path to the full chain]"
 ```
 
+### Create the Diffie-Hellman parameters
+
+Diffie-Hellman parameters allow per-session encryption of SSL traffic to help improve security. We currently store our parameters in KeyVault, the value can be updated using the following command. Note: Generating the new paramter can take over 10 minutes and there won't be any output while it's running.
+```
+az keyvault secret set --vault-name <VAULT NAME> --name <NAME OF PARAM> --value "$(openssl genpkey -genparam -algorithm DH -outform pem -pkeyopt dh_paramgen_prime_len:4096 2> /dev/null)"
+```
 ---
 
 # Setting Up FlexVol for Secrets
@@ -217,3 +224,45 @@ Example values:
 
 5. The file `deploy/azure/aadpodidentity.yml` is templated via Kustomize, so you'll need to include clientId (as `KV_MI_CLIENT_ID`) and id (as `KV_MI_ID`) of the managed identity as part of the call to Kustomize.
 
+## Using the FlexVol
+
+There are 3 steps to using the FlexVol to access secrets from KeyVault
+
+1. For the resource in which you would like to mount a FlexVol, add a metadata label with the selector from `aadpodidentity.yml`
+    ```
+    metadata:
+      labels:
+        app: atst
+        role: web
+        aadpodidbinding: atat-kv-id-binding
+    ```
+
+2. Register the FlexVol as a mount and specifiy which secrets you want to mount, along with the file name they should have. The `keyvaultobjectnames`, `keyvaultobjectaliases`, and `keyvaultobjecttypes` correspond to one another, positionally. They are passed as semicolon delimited strings, examples below.
+
+    ```
+    - name: volume-of-secrets
+      flexVolume:
+        driver: "azure/kv"
+        options:
+          usepodidentity: "true"
+          keyvaultname: "<NAME OF KEY VAULT>"
+          keyvaultobjectnames: "mysecret;mykey;mycert"
+          keyvaultobjectaliases: "mysecret.pem;mykey.txt;mycert.crt"
+          keyvaultobjecttypes: "secret;key;cert"
+          tenantid: $TENANT_ID
+    ```
+
+3. Tell the resource where to mount your new volume, using the same name that you specified for the volume above.
+    ```
+    - name: nginx-secret
+      mountPath: "/usr/secrets/"
+      readOnly: true
+    ```
+
+4. Once applied, the directory specified in the `mountPath` argument will contain the files you specified in the flexVolume. In our case, you would be able to do this:
+    ```
+    $ kubectl exec -it CONTAINER_NAME -c atst ls /usr/secrets
+    mycert.crt
+    mykey.txt
+    mysecret.pem
+    ```

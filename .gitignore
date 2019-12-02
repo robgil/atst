@@ -33,6 +33,7 @@ static/buildinfo.*
 log/*
 
 config/dev.ini
+.env*
 
 # CRLs
 /crl

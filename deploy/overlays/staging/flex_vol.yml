@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: atst
+spec:
+  template:
+    spec:
+      volumes:
+        - name: nginx-secret
+          flexVolume:
+            options:
+              keyvaultname: "atat-vault-test"
+              keyvaultobjectnames: "dhparam4096;staging-cert;staging-cert"
