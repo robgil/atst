@@ -44,7 +44,8 @@ def generate_sample_dates(_max=8):
 
 
 class MockReportingProvider(ReportingInterface):
-    MOCK_PERCENT_EXPENDED_FUNDS = 0.75
+    MOCK_PERCENT_INVOICED_EXPENDED_FUNDS = 0.60
+    MOCK_PERCENT_ESTIMATED_EXPENDED_FUNDS = 0.15
 
     FIXTURE_MONTHS = generate_sample_dates()
 
@@ -298,7 +299,12 @@ class MockReportingProvider(ReportingInterface):
                 return_dict[jedi_clin.value] = {
                     "obligated_funds": obligated_funds,
                     "expended_funds": (
-                        obligated_funds * Decimal(self.MOCK_PERCENT_EXPENDED_FUNDS)
+                        obligated_funds
+                        * Decimal(self.MOCK_PERCENT_INVOICED_EXPENDED_FUNDS)
+                    ),
+                    "estimated_expended_funds": (
+                        obligated_funds
+                        * Decimal(self.MOCK_PERCENT_ESTIMATED_EXPENDED_FUNDS)
                     ),
                 }
             return OrderedDict(
@@ -325,7 +331,8 @@ class MockReportingProvider(ReportingInterface):
                 "total_value": clin.total_amount,
                 "total_obligated_funds": clin.obligated_amount,
                 "expended_funds": (
-                    clin.obligated_amount * Decimal(self.MOCK_PERCENT_EXPENDED_FUNDS)
+                    clin.obligated_amount
+                    * Decimal(self.MOCK_PERCENT_INVOICED_EXPENDED_FUNDS)
                 ),
             }
 

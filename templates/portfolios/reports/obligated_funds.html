@@ -8,22 +8,38 @@
   <div class='panel'>
     <div class='panel__content jedi-clin-funding'>
       {% for JEDI_clin, funds in current_obligated_funds.items() %}
-        {% set remaining_funds = (funds["obligated_funds"] - funds["expended_funds"]) %}
+        {% set remaining_funds = funds.obligated_funds - (funds.expended_funds + funds.estimated_expended_funds) %}
+
         <div class="jedi-clin-funding__clin-wrapper">
           <h3 class="h5 jedi-clin-funding__header">
             {{ "JEDICLINType.{}".format(JEDI_clin) | translate }}
           </h3>
           <p class="jedi-clin-funding__subheader">Total obligated amount: {{ funds["obligated_funds"] | dollars }}</p>
-          <meter class="jedi-clin-funding__meter" value='{{remaining_funds}}' min='0' max='{{ funds["obligated_funds"] }}' title='{{ JEDI_clin }}'>
-            <div class='jedi-clin-funding__meter-fallback' style='width:{{ (funds["expended_funds"] / funds["obligated_funds"]) * 100 }}%;'></div>
-          </meter>
-          <div class="jedi-clin-funding__meter-values">
+          <div class="jedi-clin-funding__graph">
+            <span style="width:{{(funds.expended_funds / funds.obligated_funds) * 100 | int}}%" class="jedi-clin-funding__graph-bar jedi-clin-funding__graph-bar--invoiced"></span>
+            <span style="width:{{(funds.estimated_expended_funds / funds.obligated_funds) * 100 | int}}%" class="jedi-clin-funding__graph-bar jedi-clin-funding__graph-bar--estimated"></span>
+            <span style="width:{{(remaining_funds / funds.obligated_funds) * 100 | int}}%" class="jedi-clin-funding__graph-bar jedi-clin-funding__graph-bar--remaining"></span>
+          </div>
+          <div class="jedi-clin-funding__graph-values">
             <div class="jedi-clin-funding__meta">
-              <p class="jedi-clin-funding__meta-header">Funds expended:</p>
+              <p class="jedi-clin-funding__meta-header">
+                <span class="jedi-clin-funding__meta-key jedi-clin-funding__meta-key--invoiced"></span>
+                Invoiced expended funds:
+              </p>
               <p class="h3 jedi-clin-funding__meta-value">{{ funds["expended_funds"] | dollars }}</p>
             </div>
-            <div class="jedi-clin-funding__meta jedi-clin-funding__meta--remaining">
-              <p class="jedi-clin-funding__meta-header">Remaining funds:</p>
+            <div class="jedi-clin-funding__meta">
+              <p class="jedi-clin-funding__meta-header">
+                <span class="jedi-clin-funding__meta-key jedi-clin-funding__meta-key--estimated"></span>
+                Estimated expended funds:
+              </p>
+              <p class="h3 jedi-clin-funding__meta-value">{{ funds.estimated_expended_funds | dollars }}</p>
+            </div>
+            <div class="jedi-clin-funding__meta">
+              <p class="jedi-clin-funding__meta-header">
+                <span class="jedi-clin-funding__meta-key jedi-clin-funding__meta-key--remaining"></span>
+                Remaining funds:
+              </p>
               <p class="h3 jedi-clin-funding__meta-value">{{ remaining_funds | dollars }}</p>
             </div>
           </div>
