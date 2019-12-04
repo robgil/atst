@@ -3,76 +3,9 @@ from datetime import date, timedelta
 from decimal import Decimal
 
 from atst.domain.task_orders import TaskOrders
-from atst.models import Attachment, TaskOrder
+from atst.models import Attachment
+from atst.models.task_order import TaskOrder, SORT_ORDERING, Status
 from tests.factories import TaskOrderFactory, CLINFactory, PortfolioFactory
-
-
-def test_task_order_sorting():
-    """
-    Task orders should be listed first by status, and then by time_created.
-    """
-
-    today = date.today()
-    yesterday = today - timedelta(days=1)
-    future = today + timedelta(days=100)
-
-    task_orders = [
-        # Draft
-        TaskOrderFactory.create(pdf=None),
-        TaskOrderFactory.create(pdf=None),
-        TaskOrderFactory.create(pdf=None),
-        # Active
-        TaskOrderFactory.create(
-            signed_at=yesterday,
-            clins=[CLINFactory.create(start_date=yesterday, end_date=future)],
-        ),
-        TaskOrderFactory.create(
-            signed_at=yesterday,
-            clins=[CLINFactory.create(start_date=yesterday, end_date=future)],
-        ),
-        TaskOrderFactory.create(
-            signed_at=yesterday,
-            clins=[CLINFactory.create(start_date=yesterday, end_date=future)],
-        ),
-        # Upcoming
-        TaskOrderFactory.create(
-            signed_at=yesterday,
-            clins=[CLINFactory.create(start_date=future, end_date=future)],
-        ),
-        TaskOrderFactory.create(
-            signed_at=yesterday,
-            clins=[CLINFactory.create(start_date=future, end_date=future)],
-        ),
-        TaskOrderFactory.create(
-            signed_at=yesterday,
-            clins=[CLINFactory.create(start_date=future, end_date=future)],
-        ),
-        # Expired
-        TaskOrderFactory.create(
-            signed_at=yesterday,
-            clins=[CLINFactory.create(start_date=yesterday, end_date=yesterday)],
-        ),
-        TaskOrderFactory.create(
-            signed_at=yesterday,
-            clins=[CLINFactory.create(start_date=yesterday, end_date=yesterday)],
-        ),
-        TaskOrderFactory.create(
-            signed_at=yesterday,
-            clins=[CLINFactory.create(start_date=yesterday, end_date=yesterday)],
-        ),
-        # Unsigned
-        TaskOrderFactory.create(
-            clins=[CLINFactory.create(start_date=today, end_date=today)]
-        ),
-        TaskOrderFactory.create(
-            clins=[CLINFactory.create(start_date=today, end_date=today)]
-        ),
-        TaskOrderFactory.create(
-            clins=[CLINFactory.create(start_date=today, end_date=today)]
-        ),
-    ]
-
-    assert TaskOrders.sort(task_orders) == task_orders
 
 
 def test_create_adds_clins():
@@ -177,3 +110,47 @@ def test_delete_task_order_with_clins(session):
     assert not session.query(
         session.query(TaskOrder).filter_by(id=task_order.id).exists()
     ).scalar()
+
+
+def test_task_order_sort_by_status():
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+    future = today + timedelta(days=100)
+
+    initial_to_list = [
+        # Draft
+        TaskOrderFactory.create(pdf=None),
+        TaskOrderFactory.create(pdf=None),
+        TaskOrderFactory.create(pdf=None),
+        # Active
+        TaskOrderFactory.create(
+            signed_at=yesterday,
+            clins=[CLINFactory.create(start_date=yesterday, end_date=future)],
+        ),
+        # Upcoming
+        TaskOrderFactory.create(
+            signed_at=yesterday,
+            clins=[CLINFactory.create(start_date=future, end_date=future)],
+        ),
+        # Expired
+        TaskOrderFactory.create(
+            signed_at=yesterday,
+            clins=[CLINFactory.create(start_date=yesterday, end_date=yesterday)],
+        ),
+        TaskOrderFactory.create(
+            signed_at=yesterday,
+            clins=[CLINFactory.create(start_date=yesterday, end_date=yesterday)],
+        ),
+        # Unsigned
+        TaskOrderFactory.create(
+            clins=[CLINFactory.create(start_date=today, end_date=today)]
+        ),
+    ]
+
+    sorted_by_status = TaskOrders.sort_by_status(initial_to_list)
+    assert len(sorted_by_status[Status.DRAFT]) == 3
+    assert len(sorted_by_status[Status.ACTIVE]) == 1
+    assert len(sorted_by_status[Status.UPCOMING]) == 1
+    assert len(sorted_by_status[Status.EXPIRED]) == 2
+    assert len(sorted_by_status[Status.UNSIGNED]) == 1
+    assert list(sorted_by_status.keys()) == SORT_ORDERING

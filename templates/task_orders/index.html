@@ -13,7 +13,6 @@
 
 
 {% macro TaskOrderList(task_orders, status) %}
-  {% set status = "All Task Orders" %}
   <div class="accordion usa-accordion">
     {% call Accordion(title=status, id=status, heading_tag="h4") %}
       {% for task_order in task_orders %}
@@ -63,7 +62,9 @@
 <div class="portfolio-funding">
 
   {% if task_orders  %}
-    {{ TaskOrderList(task_orders) }}
+    {% for status, to_list in task_orders.items() %}
+      {{ TaskOrderList(to_list, status.value) }}
+    {% endfor %}
   {% else %}
     {{ EmptyState(
       header="task_orders.empty_state.header"|translate,

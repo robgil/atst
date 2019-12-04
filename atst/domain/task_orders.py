@@ -64,10 +64,14 @@ class TaskOrders(BaseDomainClass):
             db.session.commit()
 
     @classmethod
-    def sort(cls, task_orders: [TaskOrder]) -> [TaskOrder]:
-        # Sorts a list of task orders on two keys: status (primary) and time_created (secondary)
-        by_time_created = sorted(task_orders, key=lambda to: to.time_created)
-        by_status = sorted(by_time_created, key=lambda to: SORT_ORDERING.get(to.status))
+    def sort_by_status(cls, task_orders):
+        by_status = {}
+        for status in SORT_ORDERING:
+            by_status[status] = []
+
+        for task_order in task_orders:
+            by_status[task_order.status].append(task_order)
+
         return by_status
 
     @classmethod

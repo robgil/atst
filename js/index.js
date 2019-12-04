@@ -7,6 +7,8 @@ import Vue from 'vue/dist/vue'
 import VTooltip from 'v-tooltip'
 import stickybits from 'stickybits'
 
+import Accordion from './components/accordion'
+import AccordionList from './components/accordion_list'
 import dodlogin from './components/dodlogin'
 import optionsinput from './components/options_input'
 import multicheckboxinput from './components/multi_checkbox_input'
@@ -29,7 +31,6 @@ import SemiCollapsibleText from './components/semi_collapsible_text'
 import ToForm from './components/forms/to_form'
 import ClinFields from './components/clin_fields'
 import PopDateRange from './components/pop_date_range'
-import Accordion from './components/accordion'
 import ToggleMenu from './components/toggle_menu'
 
 Vue.config.productionTip = false
@@ -42,6 +43,7 @@ const app = new Vue({
   el: '#app-root',
   components: {
     Accordion,
+    AccordionList,
     dodlogin,
     toggler,
     optionsinput,

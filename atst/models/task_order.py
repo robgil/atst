@@ -20,12 +20,7 @@ class Status(Enum):
     UNSIGNED = "Not signed"
 
 
-SORT_ORDERING = {
-    status: order
-    for (order, status) in enumerate(
-        [Status.DRAFT, Status.ACTIVE, Status.UPCOMING, Status.EXPIRED, Status.UNSIGNED]
-    )
-}
+SORT_ORDERING = [Status.ACTIVE, Status.DRAFT, Status.UPCOMING, Status.EXPIRED, Status.UNSIGNED]
 
 
 class TaskOrder(Base, mixins.TimestampsMixin):
