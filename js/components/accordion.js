@@ -11,4 +11,10 @@ export default {
       default: false,
     },
   },
+
+  methods: {
+    collapse: function() {
+      this.isVisible = false
+    }
+  }
 }

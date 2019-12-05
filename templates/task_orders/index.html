@@ -1,4 +1,5 @@
 {% from "components/accordion.html" import Accordion %}
+{% from "components/accordion_list.html" import AccordionList %}
 {% from "components/empty_state.html" import EmptyState %}
 {% from "components/icon.html" import Icon %}
 {% from "components/sticky_cta.html" import StickyCTA %}
@@ -62,9 +63,11 @@
 <div class="portfolio-funding">
 
   {% if task_orders  %}
-    {% for status, to_list in task_orders.items() %}
-      {{ TaskOrderList(to_list, status.value) }}
-    {% endfor %}
+    {% call AccordionList() %}
+      {% for status, to_list in task_orders.items() %}
+        {{ TaskOrderList(to_list, status.value) }}
+      {% endfor %}
+    {% endcall %}
   {% else %}
     {{ EmptyState(
       header="task_orders.empty_state.header"|translate,
