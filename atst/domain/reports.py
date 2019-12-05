@@ -3,8 +3,8 @@ from flask import current_app
 
 class Reports:
     @classmethod
-    def monthly_totals(cls, portfolio):
-        return current_app.csp.reports.monthly_totals(portfolio)
+    def monthly_spending(cls, portfolio):
+        return current_app.csp.reports.get_portfolio_monthly_spending(portfolio)
 
     @classmethod
     def expired_task_orders(cls, portfolio):
@@ -12,4 +12,4 @@ class Reports:
 
     @classmethod
     def obligated_funds_by_JEDI_clin(cls, portfolio):
-        return current_app.csp.reports.get_obligated_funds_by_JEDI_clin(portfolio)
+        return current_app.csp.reports.get_spending_by_JEDI_clin(portfolio)
