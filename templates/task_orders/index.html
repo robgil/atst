@@ -17,8 +17,15 @@
   <div class="accordion usa-accordion">
     {% call Accordion(title=status, id=status, heading_tag="h4") %}
       {% for task_order in task_orders %}
+        {% set to_number %}
+          {% if task_order.number != "" %}
+            Task Order #{{ task_order.number }}
+          {% else %}
+            New Task Order
+          {% endif %}
+        {% endset %}
         <div class="accordion__content--list-item">
-          <h4><a href="{{ url_for('task_orders.review_task_order', task_order_id=task_order.id) }}">Task Order #{{ task_order.number }} {{ Icon("caret_right", classes="icon--tiny icon--primary" ) }}</a></h4>
+          <h4><a href="{{ url_for('task_orders.review_task_order', task_order_id=task_order.id) }}">{{ to_number }} {{ Icon("caret_right", classes="icon--tiny icon--primary" ) }}</a></h4>
           <div class="row">
             <div class="col col--grow">
               <h5>
