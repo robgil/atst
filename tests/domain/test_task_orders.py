@@ -148,9 +148,9 @@ def test_task_order_sort_by_status():
     ]
 
     sorted_by_status = TaskOrders.sort_by_status(initial_to_list)
-    assert len(sorted_by_status[Status.DRAFT]) == 3
-    assert len(sorted_by_status[Status.ACTIVE]) == 1
-    assert len(sorted_by_status[Status.UPCOMING]) == 1
-    assert len(sorted_by_status[Status.EXPIRED]) == 2
-    assert len(sorted_by_status[Status.UNSIGNED]) == 1
-    assert list(sorted_by_status.keys()) == SORT_ORDERING
+    assert len(sorted_by_status["Draft"]) == 3
+    assert len(sorted_by_status["Active"]) == 1
+    assert len(sorted_by_status["Upcoming"]) == 1
+    assert len(sorted_by_status["Expired"]) == 2
+    assert len(sorted_by_status["Not signed"]) == 1
+    assert list(sorted_by_status.keys()) == [status.value for status in SORT_ORDERING]

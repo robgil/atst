@@ -47,7 +47,7 @@
             </div>
             <div class="col col--grow">
               <h5>Total Expended</h5>
-              <p>$0</p>
+              <p>{{ task_order.invoiced_funds | dollars }}</p>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@
   {% if task_orders  %}
     {% call AccordionList() %}
       {% for status, to_list in task_orders.items() %}
-        {{ TaskOrderList(to_list, status.value) }}
+        {{ TaskOrderList(to_list, status) }}
       {% endfor %}
     {% endcall %}
   {% else %}

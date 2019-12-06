@@ -19,6 +19,16 @@ def build_pdf_form_data(filename="sample.pdf", object_name=None):
 def task_order():
     user = UserFactory.create()
     portfolio = PortfolioFactory.create(owner=user)
+    task_order = TaskOrderFactory.create(portfolio=portfolio)
+    CLINFactory.create(task_order=task_order)
+
+    return task_order
+
+
+@pytest.fixture
+def incomplete_to():
+    user = UserFactory.create()
+    portfolio = PortfolioFactory.create(owner=user)
 
     return TaskOrderFactory.create(portfolio=portfolio)
 
@@ -234,7 +244,7 @@ def test_task_orders_submit_form_step_three_add_clins_existing_to(
         },
     ]
     TaskOrders.create_clins(task_order.id, clin_list)
-    assert len(task_order.clins) == 2
+    assert len(task_order.clins) == 3
 
     user_session(task_order.portfolio.owner)
     form_data = {
@@ -267,11 +277,11 @@ def test_task_orders_form_step_four_review(client, user_session, completed_task_
 
 
 def test_task_orders_form_step_four_review_incomplete_to(
-    client, user_session, task_order
+    client, user_session, incomplete_to
 ):
-    user_session(task_order.portfolio.owner)
+    user_session(incomplete_to.portfolio.owner)
     response = client.get(
-        url_for("task_orders.form_step_four_review", task_order_id=task_order.id)
+        url_for("task_orders.form_step_four_review", task_order_id=incomplete_to.id)
     )
     assert response.status_code == 404
 
@@ -290,12 +300,13 @@ def test_task_orders_form_step_five_confirm_signature(
 
 
 def test_task_orders_form_step_five_confirm_signature_incomplete_to(
-    client, user_session, task_order
+    client, user_session, incomplete_to
 ):
-    user_session(task_order.portfolio.owner)
+    user_session(incomplete_to.portfolio.owner)
     response = client.get(
         url_for(
-            "task_orders.form_step_five_confirm_signature", task_order_id=task_order.id
+            "task_orders.form_step_five_confirm_signature",
+            task_order_id=incomplete_to.id,
         )
     )
     assert response.status_code == 404

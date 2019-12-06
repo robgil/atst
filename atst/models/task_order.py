@@ -1,10 +1,12 @@
 from datetime import timedelta
 from enum import Enum
+import random
 
 from sqlalchemy import Column, DateTime, ForeignKey, String
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
+from atst.domain.csp.reports import MockReportingProvider
 from atst.models.base import Base
 import atst.models.types as types
 import atst.models.mixins as mixins
@@ -20,7 +22,13 @@ class Status(Enum):
     UNSIGNED = "Not signed"
 
 
-SORT_ORDERING = [Status.ACTIVE, Status.DRAFT, Status.UPCOMING, Status.EXPIRED, Status.UNSIGNED]
+SORT_ORDERING = [
+    Status.ACTIVE,
+    Status.DRAFT,
+    Status.UPCOMING,
+    Status.EXPIRED,
+    Status.UNSIGNED,
+]
 
 
 class TaskOrder(Base, mixins.TimestampsMixin):
@@ -126,12 +134,11 @@ class TaskOrder(Base, mixins.TimestampsMixin):
 
     @property
     def start_date(self):
-        return min((c.start_date for c in self.clins), default=self.time_created.date())
+        return min((c.start_date for c in self.clins), default=None)
 
     @property
     def end_date(self):
-        default_end_date = self.start_date + timedelta(days=1)
-        return max((c.end_date for c in self.clins), default=default_end_date)
+        return max((c.end_date for c in self.clins), default=None)
 
     @property
     def days_to_expiration(self):
@@ -164,6 +171,12 @@ class TaskOrder(Base, mixins.TimestampsMixin):
         # TODO: fix task order -- reimplement using CLINs
         # Faked for display purposes
         return 50
+
+    @property
+    def invoiced_funds(self):
+        # TODO: implement this using reporting data from the CSP
+        percentage_spent = random.randrange(50, 100)
+        return (self.total_obligated_funds * percentage_spent) / 100
 
     @property
     def display_status(self):
