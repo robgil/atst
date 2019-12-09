@@ -29,6 +29,7 @@ azure-mgmt-subscription = "*"
 azure-graphrbac = "*"
 msrestazure = "*"
 azure-mgmt-authorization = "*"
+azure-mgmt-managementgroups = "*"
 
 [dev-packages]
 bandit = "*"
