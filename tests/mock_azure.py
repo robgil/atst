@@ -10,9 +10,9 @@ AZURE_CONFIG = {
 }
 
 AUTH_CREDENTIALS = {
-    "CLIENT_ID": AZURE_CONFIG["AZURE_CLIENT_ID"],
-    "SECRET_KEY": AZURE_CONFIG["AZURE_SECRET_KEY"],
-    "TENANT_ID": AZURE_CONFIG["AZURE_TENANT_ID"],
+    "client_id": AZURE_CONFIG["AZURE_CLIENT_ID"],
+    "secret_key": AZURE_CONFIG["AZURE_SECRET_KEY"],
+    "tenant_id": AZURE_CONFIG["AZURE_TENANT_ID"],
 }
 
 
@@ -26,6 +26,12 @@ def mock_authorization():
     from azure.mgmt import authorization
 
     return Mock(spec=authorization)
+
+
+def mock_managementgroups():
+    from azure.mgmt import managementgroups
+
+    return Mock(spec=managementgroups)
 
 
 def mock_graphrbac():
@@ -46,6 +52,7 @@ class MockAzureSDK(object):
 
         self.subscription = mock_subscription()
         self.authorization = mock_authorization()
+        self.managementgroups = mock_managementgroups()
         self.graphrbac = mock_graphrbac()
         self.credentials = mock_credentials()
         # may change to a JEDI cloud
