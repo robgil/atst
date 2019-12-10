@@ -127,21 +127,6 @@
     width: 100%;
   }
 
-  .label {
-    &--pending,
-    &--started {
-      background-color: $color-gold;
-    }
-
-    &--active {
-      background-color: $color-green;
-    }
-
-    &--expired {
-      background-color: $color-red;
-    }
-  }
-
   .task-order-document-link {
     &__icon {
       padding-top: 0.5rem;
