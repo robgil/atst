@@ -50,5 +50,9 @@
 
   &-list {
     max-width: $max-panel-width;
+
+    &__collapse {
+      cursor: pointer;
+    }
   }
 }

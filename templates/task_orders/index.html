@@ -14,7 +14,7 @@
 
 
 {% macro TaskOrderList(task_orders, status) %}
-  <div class="accordion usa-accordion">
+  <div class="accordion">
     {% call Accordion(title=status, id=status, heading_tag="h4") %}
       {% for task_order in task_orders %}
         {% set to_number %}
