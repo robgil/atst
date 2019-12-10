@@ -4,13 +4,13 @@ export default {
   name: 'accordion-list',
 
   components: {
-    Accordion
+    Accordion,
   },
 
   methods: {
     handleClick: function(e) {
       e.preventDefault()
       this.$children.forEach(el => el.collapse())
-    }
-  }
+    },
+  },
 }

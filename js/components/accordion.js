@@ -15,6 +15,6 @@ export default {
   methods: {
     collapse: function() {
       this.isVisible = false
-    }
-  }
+    },
+  },
 }

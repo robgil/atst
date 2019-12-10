@@ -6,7 +6,6 @@ from atst.domain.portfolios import Portfolios
 from atst.domain.task_orders import TaskOrders
 from atst.forms.task_order import SignatureForm
 from atst.models import Permissions
-from atst.models.task_order import Status as TaskOrderStatus
 
 
 @task_orders_bp.route("/task_orders/<task_order_id>/review")
