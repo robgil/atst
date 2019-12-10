@@ -38,7 +38,7 @@ class TaskOrder(Base, mixins.TimestampsMixin):
 
     pdf_attachment_id = Column(ForeignKey("attachments.id"))
     _pdf = relationship("Attachment", foreign_keys=[pdf_attachment_id])
-    number = Column(String)  # Task Order Number
+    number = Column(String, unique=True,)  # Task Order Number
     signer_dod_id = Column(String)
     signed_at = Column(DateTime)
 
