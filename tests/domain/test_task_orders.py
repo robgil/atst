@@ -2,6 +2,7 @@ import pytest
 from datetime import date, timedelta
 from decimal import Decimal
 
+from atst.domain.exceptions import AlreadyExistsError
 from atst.domain.task_orders import TaskOrders
 from atst.models import Attachment, TaskOrder
 from tests.factories import TaskOrderFactory, CLINFactory, PortfolioFactory
@@ -177,3 +178,18 @@ def test_delete_task_order_with_clins(session):
     assert not session.query(
         session.query(TaskOrder).filter_by(id=task_order.id).exists()
     ).scalar()
+
+
+def test_create_enforces_unique_number():
+    portfolio = PortfolioFactory.create()
+    number = "1234567890123"
+    assert TaskOrders.create(portfolio.id, number, [], None)
+    with pytest.raises(AlreadyExistsError):
+        TaskOrders.create(portfolio.id, number, [], None)
+
+
+def test_update_enforces_unique_number():
+    task_order = TaskOrderFactory.create()
+    dupe_task_order = TaskOrderFactory.create()
+    with pytest.raises(AlreadyExistsError):
+        TaskOrders.update(dupe_task_order.id, task_order.number, [], None)
