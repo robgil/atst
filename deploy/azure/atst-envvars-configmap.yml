@@ -13,10 +13,10 @@ data:
   CDN_ORIGIN: https://azure.atat.code.mil
   CELERY_DEFAULT_QUEUE: celery-master
   CSP: azure
-  DEBUG: 0
+  DEBUG: "0"
   FLASK_ENV: master
   LOG_JSON: "true"
-  MAIL_PORT: 587
+  MAIL_PORT: "587"
   MAIL_SENDER: postmaster@atat.code.mil
   MAIL_SERVER: smtp.mailgun.org
   MAIL_TLS: "true"
@@ -24,7 +24,7 @@ data:
   PGAPPNAME: atst
   PGDATABASE: staging
   PGHOST: atat-db.postgres.database.azure.com
-  PGPORT: 5432
+  PGPORT: "5432"
   PGSSLMODE: verify-full
   PGSSLROOTCERT: /opt/atat/atst/ssl/pgsslrootcert.crt
   PGUSER: atat_master@atat-db

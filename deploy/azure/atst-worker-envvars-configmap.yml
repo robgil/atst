@@ -9,9 +9,9 @@ data:
   AZURE_TO_BUCKET_NAME: task-order-pdfs
   CAC_URL: https://auth-staging.atat.code.mil/login-redirect
   CELERY_DEFAULT_QUEUE: celery-master
-  DEBUG: 0
+  DEBUG: "0"
   DISABLE_CRL_CHECK: "true"
-  MAIL_PORT: 587
+  MAIL_PORT: "587"
   MAIL_SENDER: postmaster@atat.code.mil
   MAIL_SERVER: smtp.mailgun.org
   MAIL_TLS: "true"
@@ -19,7 +19,7 @@ data:
   PGAPPNAME: atst
   PGDATABASE: staging
   PGHOST: atat-db.postgres.database.azure.com
-  PGPORT: 5432
+  PGPORT: "5432"
   PGSSLMODE: verify-full
   PGSSLROOTCERT: /opt/atat/atst/ssl/pgsslrootcert.crt
   PGUSER: atat_master@atat-db
