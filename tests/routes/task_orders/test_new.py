@@ -177,6 +177,26 @@ def test_task_orders_submit_form_step_two_add_number_existing_to(
     assert task_order.number != original_number
 
 
+def test_task_orders_submit_form_step_two_does_not_duplicate_number(
+    client, user_session, task_order, portfolio
+):
+    dupe_task_order = TaskOrderFactory.create()
+    form_data = {"number": task_order.number}
+
+    user_session(dupe_task_order.portfolio.owner)
+    response = client.post(
+        url_for(
+            "task_orders.submit_form_step_two_add_number",
+            task_order_id=dupe_task_order.id,
+        ),
+        data=form_data,
+    )
+    import ipdb; ipdb.set_trace()
+    assert response
+    # should redirect to step 2
+    # dupe_task_order should not have updated
+
+
 def test_task_orders_form_step_three_add_clins(client, user_session, task_order):
     user_session(task_order.portfolio.owner)
     response = client.get(

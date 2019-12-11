@@ -10,7 +10,7 @@ from flask import (
 
 from .blueprint import task_orders_bp
 from atst.domain.authz.decorator import user_can_access_decorator as user_can
-from atst.domain.exceptions import NoAccessError
+from atst.domain.exceptions import AlreadyExistsError, NoAccessError
 from atst.domain.task_orders import TaskOrders
 from atst.forms.task_order import TaskOrderForm, SignatureForm
 from atst.models.permissions import Permissions
@@ -63,10 +63,26 @@ def update_task_order(
     if form.validate():
         task_order = None
         if task_order_id:
-            task_order = TaskOrders.update(task_order_id, **form.data)
-            portfolio_id = task_order.portfolio_id
+            try:
+                task_order = TaskOrders.update(task_order_id, **form.data)
+                portfolio_id = task_order.portfolio_id
+            except AlreadyExistsError:
+                return (
+                    render_task_orders_edit(
+                        current_template, portfolio_id, task_order_id, form
+                    ),
+                    400,
+                )
         else:
-            task_order = TaskOrders.create(portfolio_id, **form.data)
+            try:
+                task_order = TaskOrders.create(portfolio_id, **form.data)
+            except AlreadyExistsError:
+                return (
+                    render_task_orders_edit(
+                        current_template, portfolio_id, task_order_id, form
+                    ),
+                    400,
+                )
 
         return redirect(url_for(next_page, task_order_id=task_order.id))
     else:

@@ -186,10 +186,17 @@ def test_create_enforces_unique_number():
     assert TaskOrders.create(portfolio.id, number, [], None)
     with pytest.raises(AlreadyExistsError):
         TaskOrders.create(portfolio.id, number, [], None)
+    assert len(portfolio.task_orders) == 1
 
 
 def test_update_enforces_unique_number():
-    task_order = TaskOrderFactory.create()
-    dupe_task_order = TaskOrderFactory.create()
+    original_number = '1234567890123'
+    task_order = TaskOrderFactory.create(number=original_number)
+
+    dupe_number = '0987654321098'
+    dupe_task_order = TaskOrderFactory.create(number=dupe_number)
+
     with pytest.raises(AlreadyExistsError):
-        TaskOrders.update(dupe_task_order.id, task_order.number, [], None)
+        TaskOrders.update(dupe_task_order.id, original_number, [], None)
+
+    assert TaskOrders.get(dupe_task_order.id)

@@ -14,16 +14,20 @@ class TaskOrders(BaseDomainClass):
 
     @classmethod
     def create(cls, portfolio_id, number, clins, pdf):
+        task_order = TaskOrder(portfolio_id=portfolio_id, number=number, pdf=pdf)
+        db.session.add(task_order)
+
         try:
-            task_order = TaskOrder(portfolio_id=portfolio_id, number=number, pdf=pdf)
-            db.session.add(task_order)
             db.session.commit()
+
         except IntegrityError:
+            db.session.expire(task_order)
+            db.session.close()
             raise AlreadyExistsError("task_order")
 
-        TaskOrders.create_clins(task_order.id, clins)
-
-        return task_order
+        else:
+            TaskOrders.create_clins(task_order.id, clins)
+            return task_order
 
     @classmethod
     def update(cls, task_order_id, number, clins, pdf):
@@ -42,10 +46,12 @@ class TaskOrders(BaseDomainClass):
 
         try:
             db.session.commit()
+
         except IntegrityError:
             raise AlreadyExistsError("task_order")
 
-        return task_order
+        else:
+            return task_order
 
     @classmethod
     def sign(cls, task_order, signer_dod_id):
