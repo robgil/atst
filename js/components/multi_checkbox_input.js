@@ -13,22 +13,14 @@ export default {
       type: Array,
       default: () => [],
     },
-    initialOtherValue: String,
     optional: Boolean,
   },
 
   data: function() {
-    const showError = (this.initialErrors && this.initialErrors.length) || false
     return {
-      showError: showError,
-      showValid: !showError && this.initialValue.length > 0,
+      showError: this.initialErrors.length > 0,
+      showValid: false,
       validationError: this.initialErrors.join(' '),
-      otherChecked: this.initialValue.includes('other')
-        ? true
-        : this.otherChecked,
-      otherText: this.initialValue.includes('other')
-        ? this.initialOtherValue
-        : '',
       selections: this.initialValue,
     }
   },
@@ -36,17 +28,15 @@ export default {
   methods: {
     onInput: function(e) {
       emitFieldChange(this)
-      this.showError = false
-      this.showValid = true
-    },
-    otherToggle: function() {
-      this.otherChecked = !this.otherChecked
+      this.showError = !this.valid
+      this.showValid = !this.showError
+      this.validationError = 'This field is required.'
     },
   },
 
   computed: {
     valid: function() {
-      return this.optional || this.showValid
+      return this.optional || this.selections.length > 0
     },
   },
 }

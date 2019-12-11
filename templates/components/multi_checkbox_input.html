@@ -45,19 +45,8 @@
         <ul>
           {% for choice in field.choices %}
             <li>
-              {% if choice[0] != 'other' %}
               <input type='checkbox' name='{{ field.name }}' id='{{ field.name }}-{{ loop.index0 }}' value='{{ choice[0] }}' v-model="selections"/>
               <label for='{{ field.name }}-{{ loop.index0 }}'>{{ choice[1] | safe }}</label>
-              {% else %}
-                <input @click="otherToggle" type='checkbox' name='{{ field.name }}' id='{{ field.name }}-{{ loop.index0 }}' value='other' v-model="selections"/>
-                <label for='{{ field.name }}-{{ loop.index0 }}'>{{ choice[1] | safe }}</label>
-
-                {% if other_input_field %}
-                  <div v-show="otherChecked">
-                    <input type='text' name='{{ other_input_field.name}}' id='{{ field.name }}-other'  v-model:value="otherText" aria-expanded='false' />
-                  </div>
-                {% endif %}
-              {% endif %}
             </li>
           {% endfor %}
         </ul>
