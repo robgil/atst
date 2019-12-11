@@ -25,7 +25,7 @@ _NO_ACCESS_CHECK_REQUIRED = _NO_LOGIN_REQUIRED + [
     "dev.test_email",  # dev tool
     "portfolios.accept_invitation",  # available to all users; access control is built into invitation logic
     "portfolios.create_portfolio",  # create a portfolio
-    "portfolios.new_portfolio",  # all users can create a portfolio
+    "portfolios.new_portfolio_step_1",  # all users can create a portfolio
     "task_orders.get_started",  # all users can start a new TO
     "users.update_user",  # available to all users
     "users.user",  # available to all users

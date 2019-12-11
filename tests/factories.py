@@ -105,13 +105,7 @@ class PortfolioFactory(Base):
 
     name = factory.Faker("domain_word")
     defense_component = factory.LazyFunction(random_service_branch)
-
-    app_migration = random_choice(data.APP_MIGRATION)
-    complexity = [random_choice(data.APPLICATION_COMPLEXITY)]
     description = factory.Faker("sentence")
-    dev_team = [random_choice(data.DEV_TEAM)]
-    native_apps = random.choice(["yes", "no", "not_sure"])
-    team_experience = random_choice(data.TEAM_EXPERIENCE)
 
     @classmethod
     def _create(cls, model_class, *args, **kwargs):

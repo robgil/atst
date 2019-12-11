@@ -1,0 +1,45 @@
+{% from "components/multi_checkbox_input.html" import MultiCheckboxInput %}
+{% from "components/options_input.html" import OptionsInput %}
+{% from "components/save_button.html" import SaveButton %}
+{% from "components/text_input.html" import TextInput %}
+{% from "components/sticky_cta.html" import StickyCTA %}
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<main class="usa-section usa-content">
+  {% include "fragments/flash.html" %}
+  <div class='portfolio-header__name'>
+    <p>{{ "portfolios.header" | translate }}</p>
+    <h1>{{ "New Portfolio" }}</h1>
+  </div>
+  {{ StickyCTA(text="Name and Describe Portfolio", context="Step 1 of 2") }}
+  <base-form inline-template>
+    <form id="portfolio-create" action="{{ url_for('portfolios.create_portfolio') }}" method="POST">
+      {{ form.csrf_token }}
+      {{ TextInput(form.name, optional=False) }}
+      {{"forms.portfolio.name.help_text" | translate | safe }}
+        <div>
+          {{ TextInput(form.description, paragraph=True) }}
+          {{"forms.portfolio.description.help_text" | translate | safe }}
+        </div>
+        <div>
+          <strong class="h4">{{ "forms.portfolio.defense_component.label" | translate }}</strong>
+          {{ "forms.portfolio.defense_component.help_text" | translate | safe }}
+          {{ MultiCheckboxInput(form.defense_component, optional=False) }}
+        </div>
+      <div class='action-group'>
+        {{
+          SaveButton(
+            text=('common.save' | translate),
+            form="portfolio-create",
+            element="input",
+          )
+        }}
+      </div>
+    </form>
+  </base-form>
+</main>
+{% endblock %}
+

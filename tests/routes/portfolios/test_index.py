@@ -18,7 +18,7 @@ def test_new_portfolio(client, user_session):
     user = UserFactory.create()
     user_session(user)
 
-    response = client.get(url_for("portfolios.new_portfolio"))
+    response = client.get(url_for("portfolios.new_portfolio_step_1"))
 
     assert response.status_code == 200
 
@@ -34,7 +34,7 @@ def test_create_portfolio_success(client, user_session):
         data={
             "name": "My project name",
             "description": "My project description",
-            "defense_component": "Air Force, Department of the",
+            "defense_component": "army",
         },
     )
 

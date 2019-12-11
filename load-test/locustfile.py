@@ -15,7 +15,7 @@ PASSWORD = os.getenv("ATAT_BA_PASSWORD", "")
 DISABLE_VERIFY = os.getenv("DISABLE_VERIFY", "true").lower() == "true"
 
 # Alpha numerics for random entity names
-LETTERS = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890"
+LETTERS = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890" #pragma: allowlist secret
 
 NEW_PORTFOLIO_CHANCE = 10
 NEW_APPLICATION_CHANCE = 10
@@ -141,15 +141,8 @@ def create_portfolio(l):
     new_portfolio_form = l.client.get("/portfolios/new")
     new_portfolio_body = {
         "name": f"Load Test Created - {''.join(choices(LETTERS, k=5))}",
-        "defense_component": "Army, Department of the",
+        "defense_component": "army",
         "description": "Test",
-        "app_migration": "none",
-        "native_apps": "yes",
-        "complexity": "storage",
-        "complexity_other": "",
-        "dev_team": "civilians",
-        "dev_team_other": "",
-        "team_experience": "none",
         "csrf_token": get_csrf_token(new_portfolio_form),
     }
 

@@ -12,10 +12,9 @@ from atst.utils.flash import formatted_flash as flash
 
 
 @portfolios_bp.route("/portfolios/new")
-def new_portfolio():
+def new_portfolio_step_1():
     form = PortfolioCreationForm()
-
-    return render_template("portfolios/new.html", form=form)
+    return render_template("portfolios/new/step_1.html", form=form)
 
 
 @portfolios_bp.route("/portfolios", methods=["POST"])
@@ -28,7 +27,7 @@ def create_portfolio():
             url_for("applications.portfolio_applications", portfolio_id=portfolio.id)
         )
     else:
-        return render_template("portfolios/new.html", form=form), 400
+        return render_template("portfolios/new/step_1.html", form=form), 400
 
 
 @portfolios_bp.route("/portfolios/<portfolio_id>/reports")

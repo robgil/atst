@@ -1,6 +1,5 @@
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from sqlalchemy.types import ARRAY
 from itertools import chain
 
 from atst.models.base import Base
@@ -19,18 +18,10 @@ class Portfolio(
 
     id = types.Id()
     name = Column(String, nullable=False)
+    description = Column(String)
     defense_component = Column(
         String, nullable=False
     )  # Department of Defense Component
-
-    app_migration = Column(String)  # App Migration
-    complexity = Column(ARRAY(String))  # Application Complexity
-    complexity_other = Column(String)
-    description = Column(String)
-    dev_team = Column(ARRAY(String))  # Development Team
-    dev_team_other = Column(String)
-    native_apps = Column(String)  # Native Apps
-    team_experience = Column(String)  # Team Experience
 
     applications = relationship(
         "Application",

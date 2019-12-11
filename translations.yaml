@@ -166,8 +166,49 @@ forms:
     portfolio_mgmt: Portfolio management
     reporting: Reporting
   portfolio:
-    name_label: Portfolio name
-    name_length_validation_message: Portfolio names can be between 4-100 characters
+    name:
+      label: Portfolio Name
+      length_validation_message: Portfolio names can be between 4-100 characters
+      help_text: |
+        <div>
+          <p>
+            Naming can be difficult. Choose a name that is descriptive enough for users to identify the Portfolio. You may consider naming based on your organization.
+          </p>
+          <p>
+            <strong>Writer's Block? A naming example</strong>
+            <ul>
+              <li>Design Support for Army Developers</li>
+            </ul>
+          </p>
+        </div>
+    description:
+      label: Portfolio Description
+      help_text: |
+        <div>
+          <p>
+            Add a brief one to two sentence description of your Portfolio. Consider this your statement of work.
+          </p>
+          <p>
+            <strong>Writer's Block? A description example includes:</strong>
+            <ul>
+              <li>Build security applications for FOB Clark</li>
+            </ul>
+          </p>
+        </div>
+    defense_component: 
+      label: "Select DoD component(s) funding your Portfolio:"
+      choices:
+        air_force: Air Force
+        army: Army
+        marine_corps: Marine Corps
+        navy: Navy
+        other: Other
+      help_text: |
+        <p>
+          Select the DOD component(s) that will fund all Applications within this Portfolio.
+          In JEDI, multiple DoD organizations can fund the same Portfolio.<br/> 
+          Select all that apply.<br/>
+        </p>
   attachment:
     object_name:
       length_error: Object name may be no longer than 40 characters.
@@ -176,41 +217,8 @@ forms:
   task_order:
     upload_error: There was an error uploading your file. Please try again. If you encounter repeated problems uploading this file, please contact CCPO.
     size_error: The file you have selected is too large. Please choose a file no larger than 64MB.
-    app_migration:
-      both: 'Yes, migrating from both an on-premise data center <strong>and</strong> another cloud provider'
-      cloud: 'Yes, migrating from another cloud provider'
-      description: Do you plan to migrate one or more existing application(s) to the cloud?
-      label: App migration
-      none: Not planning to migrate any applications
-      not_sure: Not sure
-      on_premise: 'Yes, migrating from an on-premise data center'
-    complexity:
-      conus: CONUS access
-      data_analytics: Data analytics
-      description: Which of these describes how complex your team's use of the cloud will be? Select all that apply.
-      label: Project complexity
-      not_sure: Not sure
-      oconus: OCONUS access
-      other: Other
-      storage: Storage
-      tactical_edge: Tactical edge access
-    complexity_other_label: Project Complexity Other
-    defense_component_label: Department of Defense component
-    dev_team:
-      civilians: Government civilians
-      contractor: Contractor
-      description: Who is building your cloud application(s)? Select all that apply.
-      label: Development team
-      military: Military
-      other: Other <em class='description'>(E.g. University or other partner)</em>
-    dev_team_other_label: Development Team Other
+    defense_component_label: Select DoD component(s) funding your Portfolio
     file_format_not_allowed: Only PDF or PNG files can be uploaded.
-    native_apps:
-      description: Do you plan to develop any applications in the cloud?
-      label: Native apps
-      'no': 'No, not planning to develop natively in the cloud'
-      not_sure: 'Not sure, unsure if planning to develop natively in the cloud'
-      not_sure_help: Not sure? Talk to your technical lead about where and how they plan on developing your application.
     number_description: Task order number (13 digits)
     pop_errors:
       date_order: PoP start date must be before end date.
@@ -219,8 +227,6 @@ forms:
       end_pre_contract: PoP end date must be after or on {date}.
       start_past_contract: PoP start date must be before or on {date}.
       start_pre_contract: PoP start date must be on or after {date}.
-    scope_description: 'What do you plan to do on the cloud? Some examples might include migrating an existing application or creating a prototype. You don’t need to include a detailed plan of execution, but should list key requirements. This section will be reviewed by your contracting officer, but won’t be sent to the CCPO. <p>Not sure how to describe your scope? <a href="#">Read some examples</a> to get some inspiration.</p>'
-    scope_label: Cloud project scope
     clin_funding_errors:
       obligated_amount_error: Obligated amount must be less than or equal to total amount
       funding_range_error: Dollar amount must be from $0.00 to $1,000,000,000.00
