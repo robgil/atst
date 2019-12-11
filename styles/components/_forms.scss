@@ -1,6 +1,9 @@
 // Form Grid
 .form-row {
   margin: ($gap * 4) 0;
+  &--separated {
+    border-bottom: $color-gray-lighter 1px solid;
+  }
 
   .form-col {
     flex-grow: 1;
